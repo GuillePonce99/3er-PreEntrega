@@ -1,8 +1,9 @@
-import utils from "../utils.js"
-import ProductManager from "./ProductManager.js";
+import utils from "../../../utils.js";
+import ProductManager from "./products.js";
+import jwt from "jsonwebtoken"
 
-const miProducto = new ProductManager.ProductManager("./productos.json")
-export class CartManager {
+const miProducto = new ProductManager("./productos.json")
+export default class CartManager {
     carts;
     constructor(path) {
         this.path = path;
@@ -39,40 +40,48 @@ export class CartManager {
 
     }
 
-    async addProductToCart(cid,pid) {
+    async addProductToCart(cid, pid) {
         this.carts = await this.getCarts()
-        let carrito = this.carts.find((e)=>e.id===cid)
+        let carrito = this.carts.find((e) => e.id === cid)
         let productos = await miProducto.getProducts()
         let productoAgregar = productos.find((producto) => producto.id === pid)
-        
+
         if (carrito === undefined) {
             let error = new Error(`No existe el carrito con el ID: ${cid}`)
             error.statusCode = 400
             throw error;
         }
-        
+
         if (productoAgregar === undefined) {
             let error = new Error(`No existe el producto con el ID: ${pid}`)
             error.statusCode = 400
             throw error;
         }
-        
-        const verificarCantidad = carrito.products.some((e)=> e.id === productoAgregar.id )
-        const productIndex = carrito.products.findIndex((e)=> e.id === productoAgregar.id )
 
-        if (verificarCantidad){
+        const verificarCantidad = carrito.products.some((e) => e.id === productoAgregar.id)
+        const productIndex = carrito.products.findIndex((e) => e.id === productoAgregar.id)
+
+        if (verificarCantidad) {
             carrito.products[productIndex].quantity++;
-            
+
         } else {
-            carrito.products.push({id: productoAgregar.id, quantity: 1})
+            carrito.products.push({ id: productoAgregar.id, quantity: 1 })
         }
 
         await utils.write(this.path, this.carts);
 
     }
 
-}
+    async getUserCart(token, res) {
+        try {
+            console.log("COMPLETAR");
 
-export default {
-    CartManager
+        }
+
+        catch (error) {
+            console.log(error);
+        }
+
+    }
+
 }

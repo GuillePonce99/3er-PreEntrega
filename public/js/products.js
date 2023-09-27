@@ -1,5 +1,6 @@
-const btnAdd = document.querySelectorAll(".btn-addToCart")
+const btnAddCart = document.querySelectorAll(".btn-addToCart")
 const profile = document.getElementById("ul-profile")
+const actions = document.getElementById("actions")
 
 //Funcion que una vez generado el perfil, podre cerrar sesion mediante su respectivo boton
 const logOut = async () => {
@@ -87,7 +88,6 @@ const updateCartNumber = async () => {
     if (!data) {
         return
     }
-    console.log(data);
     const cart = data.carrito
     let price = []
     let quantity = []
@@ -112,7 +112,7 @@ const updateCartNumber = async () => {
     return cartContainer.innerHTML = element
 }
 
-btnAdd.forEach(btn => {
+btnAddCart.forEach(btn => {
     btn.addEventListener('click', async (e) => {
         e.preventDefault()
 
@@ -224,6 +224,84 @@ btnAdd.forEach(btn => {
         })
     })
 })
+
+if (actions) {
+    const btnAddProduct = document.getElementById("btn-add")
+    const btnDeleteProduct = document.getElementById("btn-delete")
+    const actionAdd = document.getElementById("action_add");
+    const actionDelete = document.getElementById("action_delete");
+
+    btnAddProduct.addEventListener("click", async () => {
+        const title = document.getElementById("product_title").value
+        const description = document.getElementById("product_description").value
+        const code = document.getElementById("product_code").value
+        const price = document.getElementById("product_price").value
+        const stock = document.getElementById("product_stock").value
+        const category = document.getElementById("product_category").value
+
+        const product = {
+            title, description, code, price, stock, category
+        }
+
+        const response = await fetch("/api/products", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(product),
+        })
+
+        if (response.ok) {
+            Toastify({
+                text: `Agregado exitosamente!`,
+                duration: 3000,
+                className: "info",
+                close: true,
+                gravity: "bottom",
+                position: "center",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+
+            }).showToast()
+        } else {
+            const error = await response.json()
+            actionAdd.innerHTML = `${error.message}`
+        }
+
+    })
+
+    btnDeleteProduct.addEventListener("click", async () => {
+        let idEliminar = document.getElementById("id_eliminar").value
+        if (idEliminar === "") {
+            idEliminar = null
+        }
+        const response = await fetch(`/api/products/${idEliminar}`, {
+            method: "DELETE",
+        })
+
+        if (response.ok) {
+            Toastify({
+                text: `Producto eliminado!`,
+                duration: 3000,
+                className: "info",
+                close: true,
+                gravity: "bottom",
+                position: "center",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+
+            }).showToast()
+        } else {
+            const error = await response.json()
+            actionDelete.innerHTML = `${error.message}`
+        }
+    })
+
+}
 
 saludo()
 

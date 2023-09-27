@@ -5,10 +5,10 @@ import jwt from "jsonwebtoken"
 import Config from "../../../config/config.js"
 
 const adminArray = []
-class cartsServices {
+export default class Carts {
     constructor() { }
 
-    static getCarts = async (res) => {
+    getCarts = async (res) => {
         try {
             let carrito = await CartsModel.find()
 
@@ -19,7 +19,7 @@ class cartsServices {
         }
 
     }
-    static getCartById = async (cid, res) => {
+    getCartById = async (cid, res) => {
 
 
         try {
@@ -37,7 +37,7 @@ class cartsServices {
         }
 
     }
-    static addCart = async (token, res) => {
+    addCart = async (token, res) => {
 
         try {
 
@@ -61,12 +61,13 @@ class cartsServices {
 
             res.status(200).json({ message: `CARRITO CREADO ID: ${cart._id}`, id: cart._id })
 
+
         }
         catch (error) {
             res.sendServerError(error)
         }
     }
-    static addProductToCart = async (cid, pid, res) => {
+    addProductToCart = async (cid, pid, res) => {
 
 
         try {
@@ -95,17 +96,18 @@ class cartsServices {
 
             res.status(200).json({ message: `Carrito actualizado`, data: actualizado })
 
+
         }
         catch (error) {
             res.sendServerError(error)
         }
     }
-    static deleteCart = async (cid, res) => {
+    deleteCart = async (cid, res) => {
 
         try {
-            const eliminado = await CartsModel.deleteOne({ _id: cid })
+            const cart = await CartsModel.deleteOne({ _id: cid })
 
-            if (eliminado.deletedCount) {
+            if (cart.deletedCount) {
                 res.status(200).json({ message: `CARRITO N° ${cid} ELIMINADO` })
             } else {
                 res.status(404).json({ message: `Not Found` })
@@ -117,7 +119,7 @@ class cartsServices {
         }
 
     }
-    static deleteAllProductsFromCart = async (cid, res) => {
+    deleteAllProductsFromCart = async (cid, res) => {
 
         try {
             const carrito = await CartsModel.updateOne({ _id: cid }, { products: [] })
@@ -134,7 +136,7 @@ class cartsServices {
         }
 
     }
-    static deleteProductsFromCart = async (cid, pid, res) => {
+    deleteProductsFromCart = async (cid, pid, res) => {
 
         try {
             const carrito = await CartsModel.findById(cid)
@@ -161,7 +163,7 @@ class cartsServices {
         }
 
     }
-    static updateQuantity = async (cid, pid, quantity, res) => {
+    updateQuantity = async (cid, pid, quantity, res) => {
 
         try {
 
@@ -181,8 +183,8 @@ class cartsServices {
 
             const actualizado = await CartsModel.updateOne({ _id: cid }, carrito)
 
-
             res.status(200).json({ message: `CANTIDAD ACTUALIZADA : ${quantity}`, data: actualizado })
+
         }
 
         catch (error) {
@@ -190,7 +192,7 @@ class cartsServices {
         }
 
     }
-    static getCartByIdView = async (cid, res) => {
+    getCartByIdView = async (cid, res) => {
 
         try {
             const carrito = await CartsModel.findById(cid)
@@ -234,7 +236,7 @@ class cartsServices {
         }
     }
 
-    static getUserCart = async (token, res) => {
+    getUserCart = async (token, res) => {
         try {
             let user
             const userToken = jwt.verify(token, Config.COOKIE_KEY)
@@ -265,5 +267,5 @@ class cartsServices {
     }
 
 }
-export default cartsServices
+
 

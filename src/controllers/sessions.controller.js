@@ -1,29 +1,17 @@
-import sessionsServices from "../dao/mongo/services/sessions.services.js"
-import { createHash, generateToken, isValidPassword } from "../utils.js"
+import { sessionsServices } from "../repositories/index.js"
 
 export const login = async (req, res) => {
-    const { email, password } = req.body
-    return await sessionsServices.login(email, password, res)
-
+    return await sessionsServices.login(req, res)
 }
-
 export const loginGitHub = async (req, res) => {
-    const user = req.user
-    return await sessionsServices.loginGitHub(user, res)
-
+    return await sessionsServices.loginGitHub(req, res)
 }
-
 export const signup = async (req, res) => {
-    const { firstName, lastName, age, email, password } = req.body
-    return await sessionsServices.signup(firstName, lastName, age, email, password, res)
+    return await sessionsServices.signup(req, res)
 }
-
 export const forgot = async (req, res) => {
-    const { email, newPassword } = req.body
-    return await sessionsServices.forgot(email, newPassword, res)
-
+    return await sessionsServices.forgot(req, res)
 }
-
 export const logout = async (req, res) => {
-    return await sessionsServices.logout(res)
+    return await sessionsServices.logout(req, res)
 }

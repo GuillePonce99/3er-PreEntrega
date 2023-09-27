@@ -1,63 +1,25 @@
 import ProductModel from "../models/products.model.js";
 
-class productsServices {
+export default class Products {
     constructor() { }
-    static getProducts = async (limit, page, sort, query, req, res) => {
+    getProductById = async (pid, res) => {
 
         try {
-            const options = {
-                limit,
-                page,
-                sort: sort === "asc" ? { price: 1 } : sort === "desc" ? { price: -1 } : undefined
-            }
-
-            const filter = query ? query === "0" ? { stock: 0 } : { category: query } : {}
-
-            let result = await ProductModel.paginate(filter, options)
-
-            let status = result ? "success" : "error"
-
-            let queryFormated = query ? req.query.query.replace(/ /g, "%20") : ""
-
-
-            let response = {
-                status,
-                payload: result.docs,
-                totalPages: result.totalPages,
-                prevPage: result.prevPage,
-                nextPage: result.nextPage,
-                page: result.page,
-                hasPrevPage: result.hasPrevPage,
-                hasNextPage: result.hasNextPage,
-                prevLink: result.hasPrevPage ? `/api/products?limit=${options.limit}&page=${result.prevPage}&sort=${req.query.sort}${query ? `&query=${queryFormated}` : ""}` : null,
-                nextLink: result.hasNextPage ? `/api/products?limit=${options.limit}&page=${result.nextPage}&sort=${req.query.sort}${query ? `&query=${queryFormated}` : ""}` : null
-
-            }
-
-            return res.status(200).json({ message: "success", data: response })
-
-        }
-        catch (error) {
-            res.sendServerError(error)
-        }
-    }
-    static getProductById = async (pid, res) => {
-
-        try {
-            const product = await ProductModel.findOne({ _id: pid })
+            const product = await ProductModel.findOne({ code: pid })
             if (!product) {
                 return res.status(404).json({ message: "Not Found" });
             }
-            const result = await ProductModel.findOne({ _id: pid });
-            res.status(200).json({ message: "success", data: result })
+            const result = await ProductModel.findOne({ code: pid });
+            res.status(200).json({ message: "success", result })
         }
         catch (error) {
             res.sendServerError(error)
         }
 
     }
-    static addProduct = async (id, title, description, code, price, status, category, thumbnails, res) => {
+    addProduct = async (product, res) => {
 
+        const { id, title, description, code, price, stock, status, category, thumbnails } = product
 
         if (!title || !description || !code || !price || !category) {
             return res.status(401).json({ message: "Faltan datos" });
@@ -88,31 +50,30 @@ class productsServices {
 
             const result = await ProductModel.create(product)
 
-            res.status(200).json({ message: "Producto creado exitosamente!", data: result })
+            res.status(200).json({ message: "success", result })
         }
         catch (error) {
             res.sendServerError(error)
         }
     }
-    static deleteProduct = async (pid, res) => {
-
+    deleteProduct = async (pid, res) => {
 
         try {
-            const product = await ProductModel.findOne({ _id: pid })
+            const product = await ProductModel.findOne({ code: pid })
 
             if (!product) {
                 return res.status(404).json({ message: "Not Found" });
             }
 
-            const result = await ProductModel.findOneAndDelete({ _id: pid })
+            const result = await ProductModel.findOneAndDelete({ code: pid })
 
-            res.status(200).json({ message: "success", data: result })
+            res.status(200).json({ message: "success", result })
         }
         catch (error) {
             res.sendServerError(error)
         }
     }
-    static updateProduct = async (pid, body, res) => {
+    updateProduct = async (pid, body, res) => {
 
 
         try {
@@ -130,8 +91,7 @@ class productsServices {
 
             const actualizado = await ProductModel.findOneAndUpdate({ _id: pid }, body, { new: true })
 
-            res.status(200).json({ mensaje: "PRODUCTO ACTUALIZADO CORRECTAMENTE", data: actualizado })
-
+            res.status(200).json({ message: "success", data: actualizado })
 
         }
         catch (error) {
@@ -139,7 +99,41 @@ class productsServices {
         }
     }
 
-    static getProductsView = async (limit, page, sort, query, req, res) => {
+    getProducts = async (limit, page, query, req, res) => {
+
+        try {
+            const options = {
+                limit,
+                page
+            }
+
+            const filter = query ? query === "0" ? { stock: 0 } : { category: query } : {}
+
+            let result = await ProductModel.paginate(filter, options)
+
+            let status = result ? "success" : "error"
+
+            let queryFormated = query ? req.query.query.replace(/ /g, "%20") : ""
+
+            let response = {
+                status,
+                totalPages: result.totalPages,
+                count: result.totalDocs,
+                prevLink: result.hasPrevPage ? `/products?limit=${options.limit}&page=${result.prevPage}&sort=${req.query.sort}${query ? `&query=${queryFormated}` : ""}` : null,
+                nextLink: result.hasNextPage ? `/products?limit=${options.limit}&page=${result.nextPage}${query ? `&query=${queryFormated}` : ""}` : null,
+                payload: result.docs
+
+            }
+
+            res.status(200).json({ message: "success", response })
+
+        }
+        catch (error) {
+            res.sendServerError(error)
+        }
+    }
+
+    getProductsView = async (limit, page, sort, query, req, res) => {
 
         try {
             const options = {
@@ -167,6 +161,7 @@ class productsServices {
             })
 
             let status = result ? "success" : "error"
+
 
             let queryFormated = query ? req.query.query.replace(/ /g, "%20") : ""
 
@@ -198,4 +193,3 @@ class productsServices {
     }
 
 }
-export default productsServices

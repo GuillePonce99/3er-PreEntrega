@@ -3,15 +3,15 @@ import { getProducts, getProductById, addProduct, deleteProduct, updateProduct }
 
 export default class ProductsRouter extends Routes {
     init() {
-        this.get("/", ["USER", "USER_PREMIUM", "ADMIN"], getProducts)
+        this.get("/", ["ADMIN", "USER", "USER_PREMIUM"], getProducts)
 
-        this.get("/:pid", ["USER", "USER_PREMIUM", "ADMIN"], getProductById)
+        this.get("/:pid", ["ADMIN", "USER", "USER_PREMIUM"], getProductById)
 
-        this.post("/", ["USER", "USER_PREMIUM", "ADMIN"], addProduct)
+        this.post("/", ["ADMIN"], addProduct)
 
-        this.delete("/:pid", ["USER", "USER_PREMIUM", "ADMIN"], deleteProduct)
+        this.delete("/:pid", ["ADMIN"], deleteProduct)
 
-        this.put("/:pid", ["USER", "USER_PREMIUM", "ADMIN"], updateProduct)
+        this.put("/:pid", ["ADMIN"], updateProduct)
     }
 }
 

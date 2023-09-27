@@ -1,6 +1,6 @@
-import utils from "../../utils.js"
+import utils from "../../../utils.js"
 
-export class ProductManager {
+export default class ProductManager {
     products;
     constructor(path) {
         this.path = path;
@@ -95,8 +95,15 @@ export class ProductManager {
 
         await utils.write(this.path, this.products)
     }
-}
 
-export default {
-    ProductManager
-};
+    async getProductsView(limit, page, sort, query, req, res) {
+
+        try {
+            let data = await utils.read(this.path)
+            return data
+        }
+        catch (error) {
+            return console.log(error);
+        }
+    }
+}

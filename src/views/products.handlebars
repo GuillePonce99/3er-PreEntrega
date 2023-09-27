@@ -93,24 +93,39 @@
         </div>
     </div>
 
+    {{#if data.payload.isAdmin}}
+    <div class="container-actions" id="actions">
+        <div class="container-actions-add">
+            <div class="title_add">
+                <h2>AGREGAR</h2>
+            </div>
+            <div class="inputs">
+                <input placeholder="Nombre" type="text" id="product_title">
+                <input placeholder="Descripcion" type="text" id="product_description">
+                <input placeholder="Codigo" type="text" id="product_code">
+                <input placeholder="Precio" type="number" id="product_price">
+                <input placeholder="Stock" type="number" id="product_stock">
+                <input placeholder="Categoria" type="text" id="product_category">
+                <button class="btn_add" type="submit" id="btn-add">CARGAR PRODUCTO</button>
+            </div>
+            <div id="action_add"></div>
+        </div>
+        <div class="container-actions-delete">
+            <div class="title_delete">
+                <h2>ELIMINAR</h2>
+            </div>
+
+            <div class="inputs">
+                <input placeholder="Id a eliminar" type="text" id="id_eliminar">
+                <button class="btn_delete" type="submit" id="btn-delete">ELIMINAR PRODUCTO</button>
+            </div>
+            <div id="action_delete"></div>
+
+        </div>
+    </div>
+    {{/if}}
+
 </div>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/products.js"></script>
-
-{{!
-
-
-<ul class="ul-profile-2">
-    <li class="profile-role">"Admin"</li>
-    <li><strong>adminCoder@coder.com</strong></li>
-    <button class="btn-logout" id="btn-logout">SALIR</button>
-</ul>
-
-<ul class="ul-profile-2" id="ul-profile">
-    <li class="li-titles">Rol</li>
-    <li class="li-titles">Email</li>
-</ul>
-
-
-}}

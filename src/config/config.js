@@ -1,4 +1,5 @@
 import dotenv from "dotenv"
+import { options } from "./commander.js";
 
 const environment = "PRODUCTION"
 
@@ -17,5 +18,6 @@ export default {
     GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
     COOKIE_KEY: process.env.COOKIE_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
-    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    PERSISTENCE: options.Persistence
 }

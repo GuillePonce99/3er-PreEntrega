@@ -2,9 +2,9 @@ import UserModel from "../models/users.model.js"
 import { createHash, generateToken, isValidPassword } from "../../../utils.js"
 import Config from "../../../config/config.js"
 
-class sessionsServices {
+export default class Sessions {
     constructor() { }
-    static login = async (email, password, res) => {
+    login = async (email, password, res) => {
 
         try {
             if (email === Config.ADMIN_EMAIL && password === Config.ADMIN_PASSWORD) {
@@ -46,7 +46,7 @@ class sessionsServices {
 
     }
 
-    static loginGitHub = async (user, res) => {
+    loginGitHub = async (user, res) => {
 
         try {
             let token = generateToken({
@@ -68,28 +68,21 @@ class sessionsServices {
 
     }
 
-    static signup = async (firstName, lastName, age, email, password, res) => {
+    signup = async (user, res) => {
 
         try {
-            const repetedEmail = await UserModel.findOne({ email })
+            const repetedEmail = await UserModel.findOne({ email: user.email })
 
             if (repetedEmail) {
                 return res.sendUserError({ message: "El email ingresado ya existe!" })
             }
 
-            if (age <= 0 || age >= 100) {
+            if (user.age <= 0 || user.age >= 100) {
                 return res.sendUserError({ message: "Ingrese una edad correcta!" })
             }
 
-
-            const user = {
-                firstName,
-                lastName,
-                age,
-                email,
-                password: createHash(password),
-                role: "user"
-            }
+            user.password = createHash(user.password)
+            user = { ...user, role: "user" }
 
             const result = await UserModel.create(user)
 
@@ -99,7 +92,7 @@ class sessionsServices {
         }
     }
 
-    static forgot = async (email, newPassword, res) => {
+    forgot = async (email, newPassword, res) => {
 
         try {
             const user = await UserModel.findOne({ email })
@@ -122,11 +115,9 @@ class sessionsServices {
         }
     }
 
-    static logout = async (res) => {
+    logout = async (res) => {
 
         return res.sendSuccess()
 
     }
 }
-
-export default sessionsServices

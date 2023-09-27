@@ -1,46 +1,35 @@
-import cartsServices from "../dao/mongo/services/carts.services.js"
+import { cartsServices } from "../repositories/index.js"
 
 export const getCarts = async (req, res) => {
-    return await cartsServices.getCarts(res)
+    return await cartsServices.getCarts(req, res)
 }
 export const getCartById = async (req, res) => {
-    const { cid } = req.params
-    return await cartsServices.getCartById(cid, res)
+    return await cartsServices.getCartById(req, res)
 }
 export const addCart = async (req, res) => {
-
-    const token = req.cookies["coderCookieToken"];
-    return await cartsServices.addCart(token, res)
+    return await cartsServices.addCart(req, res)
 }
 export const addProductToCart = async (req, res) => {
-    const { cid, pid } = req.params
-    return await cartsServices.addProductToCart(cid, pid, res)
+    return await cartsServices.addProductToCart(req, res)
 }
 export const deleteCart = async (req, res) => {
-    const { cid } = req.params
-    return await cartsServices.deleteCart(cid, res)
+    return await cartsServices.deleteCart(req, res)
 }
 export const deleteAllProductsFromCart = async (req, res) => {
-    const { cid } = req.params
-    return await cartsServices.deleteAllProductsFromCart(cid, res)
+    return await cartsServices.deleteAllProductsFromCart(req, res)
 }
 export const deleteProductsFromCart = async (req, res) => {
-    const { cid, pid } = req.params
-    return await cartsServices.deleteProductsFromCart(cid, pid, res)
+    return await cartsServices.deleteProductsFromCart(req, res)
 }
 export const updateQuantity = async (req, res) => {
-    const { cid, pid } = req.params
-    const { quantity } = req.body
-    return await cartsServices.updateQuantity(cid, pid, quantity, res)
+    return await cartsServices.updateQuantity(req, res)
 }
 export const getCartByIdView = async (req, res) => {
-    const { cid } = req.params
-    return await cartsServices.getCartByIdView(cid, res)
+    return await cartsServices.getCartByIdView(req, res)
 }
 
 export const getUserCart = async (req, res) => {
-    const token = req.cookies["coderCookieToken"];
-    return await cartsServices.getUserCart(token, res)
+    return await cartsServices.getUserCart(req, res)
 }
 
 

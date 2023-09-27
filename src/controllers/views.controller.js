@@ -1,6 +1,5 @@
 import { getProductsView } from "./product.controller.js"
-import { getCartByIdView } from "../controllers/carts.controller.js"
-
+import { getCartByIdView } from "./carts.controller.js"
 
 export class viewsController {
 
@@ -11,10 +10,6 @@ export class viewsController {
 
     static chat = async (req, res) => {
         res.render("chat", { style: "chat.css", title: "CHAT" })
-    }
-
-    static realtimeproducts = async (req, res) => {
-        res.render("realTimeProducts", { style: "styles.css", title: "PRODUCTOS-REAL-TIME" })
     }
 
     static products = async (req, res) => {
