@@ -1,4 +1,4 @@
-import SessionDTO from "../dao/DTOs/session.dto.js"
+import { signupDTO, userDTO } from "../dao/DTOs/session.dto.js"
 export default class SessionRepository {
     constructor(dao) {
         this.dao = dao
@@ -14,7 +14,7 @@ export default class SessionRepository {
     }
 
     signup = async (req, res) => {
-        let user = new SessionDTO(req.body)
+        let user = new signupDTO(req.body)
         return await this.dao.signup(user, res)
     }
 
@@ -25,5 +25,10 @@ export default class SessionRepository {
 
     logout = async (req, res) => {
         return await this.dao.logout(res)
+    }
+
+    current = async (req, res) => {
+        const user = new userDTO(req.user)
+        return await this.dao.current(user, res)
     }
 }

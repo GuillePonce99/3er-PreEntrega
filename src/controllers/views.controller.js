@@ -9,7 +9,7 @@ export class viewsController {
     }
 
     static chat = async (req, res) => {
-        res.render("chat", { style: "chat.css", title: "CHAT" })
+        res.render("chat", { style: "chat.css", title: "CHAT", user: req.user })
     }
 
     static products = async (req, res) => {

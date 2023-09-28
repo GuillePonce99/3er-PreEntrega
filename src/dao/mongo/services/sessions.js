@@ -10,7 +10,8 @@ export default class Sessions {
             if (email === Config.ADMIN_EMAIL && password === Config.ADMIN_PASSWORD) {
                 const token = generateToken({
                     email,
-                    role: "admin"
+                    role: "admin",
+                    admin: true
                 })
 
                 res.cookie("coderCookieToken", token, {
@@ -31,7 +32,8 @@ export default class Sessions {
                     firstName: user.firstName,
                     lastName: user.lastName,
                     age: user.age,
-                    role: "user"
+                    role: "user",
+                    admin: false
                 })
 
                 res.cookie("coderCookieToken", token, {
@@ -119,5 +121,9 @@ export default class Sessions {
 
         return res.sendSuccess()
 
+    }
+
+    current = async (user, res) => {
+        return res.sendSuccess(user)
     }
 }

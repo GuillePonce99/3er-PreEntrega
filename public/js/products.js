@@ -103,7 +103,7 @@ const updateCartNumber = async () => {
 
     element += `
         <h1>LISTA DE PRODUCTOS</h1>
-        <a href="/carts/${data.cartId}" class="btn-cart" id="btn-cart">
+        <a href="/carts/${data.cartId}" class="btn-cart" id="btn-cart" disabled>
             <div>🛒</div>
             <p  class="counter">${count}</p>
             <p  class="total">$${total}</p>
@@ -112,7 +112,26 @@ const updateCartNumber = async () => {
     return cartContainer.innerHTML = element
 }
 
+const isAdmin = () => {
+    const isAdmin = profile.dataset.admin
+    if (isAdmin) {
+        const btnCart = document.getElementById("btn-cart")
+        btnAddCart.disable = true
+        btnCart.disable = true
+
+        btnCart.style.opacity = 0.2
+        btnAddCart.forEach((btn) => {
+            btn.style.opacity = 0.2;
+        })
+
+    }
+}
+isAdmin()
+
+
+
 btnAddCart.forEach(btn => {
+
     btn.addEventListener('click', async (e) => {
         e.preventDefault()
 
@@ -223,7 +242,10 @@ btnAddCart.forEach(btn => {
             }
         })
     })
+
 })
+
+
 
 if (actions) {
     const btnAddProduct = document.getElementById("btn-add")

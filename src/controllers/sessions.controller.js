@@ -15,3 +15,7 @@ export const forgot = async (req, res) => {
 export const logout = async (req, res) => {
     return await sessionsServices.logout(req, res)
 }
+
+export const current = async (req, res) => {
+    return await sessionsServices.current(req, res)
+}

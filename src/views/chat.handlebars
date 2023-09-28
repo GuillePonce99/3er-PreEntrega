@@ -1,7 +1,11 @@
 <div class="chat-container">
     <div class="chat-header">
         <div class="avatar"></div>
-        <p id="user-title"></p>
+        {{#if user.admin}}
+        <p id="user-title">Admin</p>
+        {{else}}
+        <p id="user-title">{{user.firstName}}</p>
+        {{/if}}
     </div>
 
     <div id="chat"></div>

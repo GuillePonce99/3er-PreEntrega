@@ -166,6 +166,7 @@ export default class Products {
             let queryFormated = query ? req.query.query.replace(/ /g, "%20") : ""
 
             const user = await req.user
+
             let isAdmin = false
 
             if (user.role === "admin") {

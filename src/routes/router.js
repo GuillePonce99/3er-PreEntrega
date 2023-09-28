@@ -64,7 +64,7 @@ export default class Routes {
             return res.render("403", { style: "error.css" })
             //return res.status(403).send({ error: "No autorizado" })
         }
-        req.user = user;
+
         next()
     }
 

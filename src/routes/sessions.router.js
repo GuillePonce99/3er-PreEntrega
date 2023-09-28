@@ -1,4 +1,4 @@
-import { login, loginGitHub, signup, forgot, logout } from "../controllers/sessions.controller.js";
+import { login, loginGitHub, signup, forgot, logout, current } from "../controllers/sessions.controller.js";
 import { passportCall } from "../utils.js";
 import Routes from "./router.js";
 
@@ -16,7 +16,7 @@ export default class SessionRouter extends Routes {
         this.get("/logout", ["PUBLIC"], logout)
 
         //Ruta para obtener el token del request
-        this.get("/current", ["USER", "USER_PREMIUM", "ADMIN"], passportCall("jwt"), (req, res) => { res.send(req.user) })
+        this.get("/current", ["USER", "USER_PREMIUM", "ADMIN"], passportCall("jwt"), current)
 
         //Rutas en caso de que exista un error en la autenticacion de passport
         this.get("/failureSignup", ["PUBLIC"], (req, res) => { res.status(401).json({ message: "Email en uso o edad incorrecta!" }) })

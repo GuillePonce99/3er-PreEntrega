@@ -60,7 +60,7 @@ export const authToken = (req, res, next) => {
 }
 */
 
-export const passportCall = (strategy, options) => {
+export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, (error, user, info) => {
       if (error) {
@@ -69,7 +69,9 @@ export const passportCall = (strategy, options) => {
       if (!user) {
         return res.status(401).send({ error: info.messages ? info.messages : info.toString() })
       }
+
       req.user = user
+
       next()
     })(req, res, next)
   }

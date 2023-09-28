@@ -2,11 +2,12 @@
 //chat
 const socket = io()
 const chatBox = document.getElementById("chat-box");
-const userTitle = document.getElementById("user-title")
+const userName = document.getElementById("user-title").textContent
 const btnAvatar = document.getElementById("btn-avatar")
 const inputImage = document.getElementById("input-image")
 const btnSend = document.getElementById("btn-send")
 
+/*
 Swal.fire({
     title: 'Bienvenido',
     input: 'text',
@@ -24,12 +25,13 @@ Swal.fire({
         socket.emit("new-user", { user: user, id: socket.id })
     }
 })
+*/
 
 chatBox.addEventListener("keyup", (e) => {
     if (e.key === "Enter") {
         if (chatBox.value.trim().length > 0) {
             socket.emit("message", {
-                user: user,
+                user: userName,
                 message: chatBox.value,
             })
             chatBox.value = ""
@@ -40,33 +42,35 @@ chatBox.addEventListener("keyup", (e) => {
 
 btnSend.addEventListener("click", () => {
     socket.emit("message", {
-        user: user,
+        user: userName,
         message: chatBox.value,
     })
     chatBox.value = ""
 })
 
 
-
+/*
 socket.on("user-dom", (data) => {
     userTitle.innerHTML = `${data}`
 })
+*/
 
 socket.on("message_logs", (data) => {
     let hora = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     let chat = document.getElementById("chat")
     let message = ""
     data.forEach((e) => {
+        ;
         let classChat = ""
         let classAvatar = ""
-        if (e.user === user) {
+        if (e.user === userName) {
             classChat = "user-message"
             classAvatar = "user-avatar"
         } else {
             classChat = "contact-message"
             classAvatar = "contact-avatar"
         }
-        message = message +
+        message +=
             `
             <div class="message ${classChat}">
                 <div class="${classAvatar}"></div>
