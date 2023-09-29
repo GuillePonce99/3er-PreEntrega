@@ -254,10 +254,37 @@ export default class Carts {
                 if (carrito === null) {
                     res.status(404).json({ message: `Not Found` })
                 } else {
-                    res.status(200).json({ cartId: carrito._id, carrito })
+                    res.status(200).json({ cartId: carrito._id, carrito, user })
                 }
             }
 
+        }
+
+        catch (error) {
+            res.sendServerError(error)
+        }
+
+    }
+
+    purchase = async (token, cid, res) => {
+        try {
+            const userToken = jwt.verify(token, Config.COOKIE_KEY)
+            const user = await UserModel.findOne({ "email": userToken.email })
+            const cart = await CartsModel.findById(cid)
+
+            cart.products.map(async (prod) => {
+                const product = prod.product
+                const quantity = prod.quantity
+
+                if (product.stock >= quantity) {
+                    const newStock = product.stock - quantity
+                    product.stock = newStock
+                    await ProductModel.updateOne({ "code": product.code }, product)
+                } else {
+
+                    res.status(404).json({ message: `Sin stock` })
+                }
+            })
         }
 
         catch (error) {

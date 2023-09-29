@@ -6,6 +6,85 @@ const btnDelete = document.querySelectorAll("#btn-delete")
 const totalElem = document.getElementById("total-cart")
 const btnVolver = document.getElementById("btnVolver")
 
+const purchase = async () => {
+    const btnBuy = document.getElementById("btn-buy")
+
+    const cart = await getCartId()
+    const cid = cart.cartId
+
+    btnBuy.addEventListener("click", async (e) => {
+
+        e.preventDefault()
+        const code = RandomCode(10)
+        const response = await fetch(`/api/carts/${cid}/purchase`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code })
+        })
+
+        if (response.ok) {
+            const data = await response.json()
+
+            if (data.ids.length > 0) {
+                Toastify({
+                    text: `Algunos productos no estan disponibles`,
+                    duration: 3000,
+                    className: "info",
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to left, #b00017, #5e1f21)",
+                    }
+                }).showToast()
+            } else {
+                Toastify({
+                    text: `Compra finalizada!`,
+                    duration: 3000,
+                    className: "info",
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    }
+                }).showToast()
+            }
+            location.reload()
+        } else {
+            Toastify({
+                text: `Productos sin stock!`,
+                duration: 3000,
+                className: "info",
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to left, #b00017, #5e1f21)",
+                }
+            }).showToast()
+        }
+    })
+
+}
+
+const RandomCode = (n) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+
+    for (let i = 0; i < n; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+    }
+
+    return code;
+}
+
 const getCartId = async () => {
 
     const response = await fetch("/api/carts/user/cart")
@@ -26,10 +105,14 @@ const updateTotal = async () => {
         price.push(product.product.price * product.quantity)
     })
     let total = price.reduce((acc, currentValue) => acc + currentValue, 0);
-    totalElem.innerHTML = `<h2 class="total-cart"> TOTAL: $ ${total}</h2>`
+    totalElem.innerHTML = `
+        <h2 class="total-cart"> TOTAL: $ ${total}</h2>
+        <button class="btn-ptr btn-buy" id="btn-buy" type="submit">FINALIZAR COMPRA</button>
+    `
+    await purchase()
 }
-
 updateTotal()
+
 
 const updateQuantityDom = (id, n) => {
 
@@ -173,10 +256,13 @@ btnDelete.forEach(btn => {
 
                 ul.remove()
                 updateTotal()
+                purchase()
 
             }
         })
 
     })
 })
+
+
 

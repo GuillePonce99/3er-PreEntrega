@@ -114,72 +114,58 @@ const updateCartNumber = async () => {
 
 const isAdmin = () => {
     const isAdmin = profile.dataset.admin
-    if (isAdmin) {
-        const btnCart = document.getElementById("btn-cart")
-        btnAddCart.disable = true
-        btnCart.disable = true
+    if (isAdmin === "true") {
+        console.log("is admin");
 
+        const btnCart = document.getElementById("btn-cart")
+        btnCart.setAttribute("disabled", "")
         btnCart.style.opacity = 0.2
+
         btnAddCart.forEach((btn) => {
             btn.style.opacity = 0.2;
+            btn.setAttribute("disabled", "")
         })
-
+    } else {
+        console.log("is user");
     }
 }
 isAdmin()
 
-
-
 btnAddCart.forEach(btn => {
-
     btn.addEventListener('click', async (e) => {
-        e.preventDefault()
+        try {
 
-        const ul = e.target.closest('ul')
+            e.preventDefault()
 
-        const productId = ul.dataset.id
+            const ul = e.target.closest('ul')
 
-        let cart = await getCartId()
+            const productId = ul.dataset.id
 
-        let cartId
+            let cart = await getCartId()
 
-        if (!cart) {
-            cartId = undefined
-        } else {
-            cartId = cart.cartId
-        }
+            let cartId
 
-        if (cartId === undefined) {
+            if (!cart) {
+                cartId = undefined
+            } else {
+                cartId = cart.cartId
+            }
 
-            await fetch(`/api/carts`, {
+            if (cartId === undefined) {
 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                await fetch(`/api/carts`, {
 
-            }).then(res => res.json()).then(data => {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
 
-                const { id } = data
+                }).then(res => res.json()).then(data => {
 
-                cid = id
+                    const { id } = data
 
-                Toastify({
-                    text: `CARRITO N°: ${cid} creado con exito `,
-                    duration: 3000,
-                    className: "info",
-                    close: true,
-                    gravity: "top",
-                    position: "center",
-                    stopOnFocus: true,
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    }
-                }).showToast()
-            }).catch((error) => {
-
-                if (error) {
+                    cid = id
 
                     Toastify({
-                        text: `Error al crear un carrito`,
+                        text: `CARRITO N°: ${cid} creado con exito `,
                         duration: 3000,
                         className: "info",
                         close: true,
@@ -187,65 +173,83 @@ btnAddCart.forEach(btn => {
                         position: "center",
                         stopOnFocus: true,
                         style: {
-                            background: "linear-gradient(to left, #b00017, #5e1f21)"
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        }
+                    }).showToast()
+                }).catch((error) => {
+
+                    if (error) {
+
+                        Toastify({
+                            text: `Error al crear un carrito`,
+                            duration: 3000,
+                            className: "info",
+                            close: true,
+                            gravity: "top",
+                            position: "center",
+                            stopOnFocus: true,
+                            style: {
+                                background: "linear-gradient(to left, #b00017, #5e1f21)"
+                            }
+                        }).showToast();
+
+                    }
+                })
+            }
+
+            cart = await getCartId()
+            cartId = cart.cartId
+            //console.log(cartId, productId);
+
+            await fetch(`/api/carts/${cartId}/product/${productId}`, {
+
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId }),
+
+            }).then(() => {
+
+                updateCartNumber()
+
+                Toastify({
+                    text: `Agregado exitosamente!`,
+                    duration: 3000,
+                    className: "info",
+                    close: true,
+                    gravity: "bottom",
+                    position: "center",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    }
+
+                }).showToast()
+
+            }).catch((error) => {
+                if (error) {
+
+                    Toastify({
+                        text: 'Error al agregar el producto al carrito',
+                        className: "success",
+                        close: true,
+                        gravity: "bottom",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to left, #b00017, #5e1f21)",
                         }
                     }).showToast();
 
                 }
             })
+
+        } catch (error) {
+            console.log(error);
         }
-
-        cart = await getCartId()
-        cartId = cart.cartId
-        //console.log(cartId, productId);
-
-        await fetch(`/api/carts/${cartId}/product/${productId}`, {
-
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productId }),
-
-        }).then(() => {
-
-            updateCartNumber()
-
-            Toastify({
-                text: `Agregado exitosamente!`,
-                duration: 3000,
-                className: "info",
-                close: true,
-                gravity: "bottom",
-                position: "center",
-                stopOnFocus: true,
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                }
-
-            }).showToast()
-
-        }).catch((error) => {
-            if (error) {
-
-                Toastify({
-                    text: 'Error al agregar el producto al carrito',
-                    className: "success",
-                    close: true,
-                    gravity: "bottom",
-                    position: "center",
-                    style: {
-                        background: "linear-gradient(to left, #b00017, #5e1f21)",
-                    }
-                }).showToast();
-
-            }
-        })
     })
 
 })
-
-
 
 if (actions) {
     const btnAddProduct = document.getElementById("btn-add")
@@ -326,4 +330,5 @@ if (actions) {
 }
 
 saludo()
+
 

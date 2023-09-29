@@ -13,6 +13,7 @@ import CartsRouter from "./routes/carts.router.js"
 import ProductsRouter from "./routes/products.router.js"
 import ViewsRouter from "./routes/views.router.js"
 import SessionRouter from "./routes/sessions.router.js"
+import TicketsRouter from "./routes/tickets.router.js"
 
 const app = express()
 
@@ -55,6 +56,9 @@ app.use("/", routerViews.getRouter())
 
 const routerSessions = new SessionRouter()
 app.use("/api/sessions", routerSessions.getRouter())
+
+const routerTickets = new TicketsRouter()
+app.use("/api/tickets", routerTickets.getRouter())
 
 //RENDER PARA TODAS LAS PAGINAS QUE NO EXISTAN
 

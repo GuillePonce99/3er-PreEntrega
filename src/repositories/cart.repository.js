@@ -38,7 +38,6 @@ export default class CartReposity {
         const { cid } = req.params
         return await this.dao.getCartByIdView(cid, res)
     }
-
     getUserCart = async (req, res) => {
         const token = req.cookies["coderCookieToken"];
         return await this.dao.getUserCart(token, res)

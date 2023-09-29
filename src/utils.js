@@ -49,7 +49,7 @@ export const authToken = (req, res, next) => {
   if (!authHeader) {
     return res.status(401).send({ error: "No autenticado" })
   }
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.(" ")[1];
   jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
     if (error) {
       return res.status(401).send({ error: "No autorizado" })

@@ -22,7 +22,6 @@ export default class ProductRepository {
         return await this.dao.deleteProduct(pid, res)
     }
     updateProduct = async (req, res) => {
-        console.log("cantidaddd");
         const { pid } = req.params
         return await this.dao.updateProduct(pid, req.body, res)
     }

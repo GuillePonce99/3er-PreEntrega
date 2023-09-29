@@ -1,5 +1,6 @@
 import { getProductsView } from "./product.controller.js"
 import { getCartByIdView } from "./carts.controller.js"
+import { getTickets } from "./tickets.controller.js"
 
 export class viewsController {
 
@@ -19,7 +20,6 @@ export class viewsController {
 
     static carts = async (req, res) => {
         const data = await getCartByIdView(req, res)
-
         res.render("carts", { style: "styles.css", title: "CARRITO", data })
     }
 
@@ -33,6 +33,11 @@ export class viewsController {
 
     static forgot = async (req, res) => {
         res.render("forgot", { style: "login.css" })
+    }
+
+    static tickets = async (req, res) => {
+        const data = await getTickets(req, res)
+        res.render("tickets", { style: "styles.css", data })
     }
 
 }

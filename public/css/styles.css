@@ -36,6 +36,17 @@ body {
 
 }
 
+.cartTicket {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    list-style-type: none;
+    border-bottom: 3px solid #246355;
+    padding: 5px 20px;
+    align-items: center;
+
+}
+
 ul {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 1fr 1fr 1fr 1fr;
@@ -174,7 +185,9 @@ h2 {
 .btn-ptr input,
 .btn_delete,
 .btn_add,
-.btn-logout {
+.btn-logout,
+.btn-buy,
+.btn-tickets {
     border-radius: 8px;
     background-color: #246355;
     color: white;
@@ -182,6 +195,14 @@ h2 {
     padding: 10px;
     text-decoration: none;
     font-size: 12px;
+}
+
+.btn-tickets {
+    margin-bottom: 15px;
+}
+
+.btn-buy {
+    margin: 15px 0px;
 }
 
 .btn-logout {
@@ -198,7 +219,9 @@ h2 {
 .btn-pages:hover,
 .btn-addToCart:hover,
 .cartId:hover,
-.btn-logout:hover {
+.btn-logout:hover,
+.btn-buy:hover,
+.btn-tickets:hover {
     box-shadow: 0 0px 25px 3px rgba(0, 0, 0, 0.8), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -358,6 +381,8 @@ h2 {
 }
 
 .total-container {
+    display: flex;
+    justify-content: space-evenly;
     background-color: #246355;
     border-top: solid 5px #0F362D;
     color: white;

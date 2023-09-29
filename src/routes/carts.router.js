@@ -1,5 +1,5 @@
 import Routes from "./router.js"
-import { getCarts, getCartById, getUserCart, addCart, addProductToCart, deleteAllProductsFromCart, deleteProductsFromCart, deleteCart, updateQuantity } from "../controllers/carts.controller.js"
+import { getCarts, getCartById, getUserCart, addCart, addProductToCart, deleteAllProductsFromCart, deleteProductsFromCart, deleteCart, updateQuantity, purchase } from "../controllers/carts.controller.js"
 
 export default class CartsRouter extends Routes {
     init() {
@@ -20,5 +20,7 @@ export default class CartsRouter extends Routes {
         this.put("/:cid/products/:pid", ["USER", "USER_PREMIUM", "ADMIN"], updateQuantity)
 
         this.get("/user/cart", ["USER", "USER_PREMIUM", "ADMIN"], getUserCart)
+
+        this.post("/:cid/purchase", ["USER", "USER_PREMIUM", "ADMIN"], purchase)
     }
 }

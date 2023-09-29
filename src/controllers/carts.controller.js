@@ -1,4 +1,5 @@
 import { cartsServices } from "../repositories/index.js"
+import { ticketServices } from "../repositories/index.js"
 
 export const getCarts = async (req, res) => {
     return await cartsServices.getCarts(req, res)
@@ -27,9 +28,11 @@ export const updateQuantity = async (req, res) => {
 export const getCartByIdView = async (req, res) => {
     return await cartsServices.getCartByIdView(req, res)
 }
-
 export const getUserCart = async (req, res) => {
     return await cartsServices.getUserCart(req, res)
+}
+export const purchase = async (req, res) => {
+    return await ticketServices.createTicket(req, res)
 }
 
 
